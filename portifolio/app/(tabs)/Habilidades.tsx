@@ -3,24 +3,22 @@ import FooterNav from "../components/footerbar"
 import Header from "../components/header"
 
 const linguagens = [
-    "React Native", "Expo" , "Typescript", 
+    "C++", "C", "Python", "Java", "HTML", "CSS", "JavaScript", "React Native"
 ];
 const ferramentas = [
-    "View", "Text", "TouchableOpacity", "StyleSheet", "Image", "Linking" , "Dimensions"
+    "VSCode", "Git", "Vim", "React", "Notion", "Figma" , "Obsidian"
 ];
 
 export default function Habilidades(){
     return(
         <View style={styles.container}>
             <Header/>
-            <View style={styles.containerTitle}>
-                <Text style={styles.title}>Sobre o aplicativo</Text>
-                <Text style={styles.text}>
-                    Esse aplicativo foi criado para ser meu portifolio, feito na cadeira de Programação Web e Mobile. O aplicativo foi feito utilizando essas tecnologias.
-                </Text>
-            </View>
+
+            <Text style={styles.title}>Habilidades</Text>
+            <Text style={styles.text}>Aqui estão algumas habilidades que possuo, como linguagens de programação e ferramentas de tecnologia</Text>
+            
             <View style={styles.content}>  
-                <Text style={styles.sectionTitle}>Tecnologias</Text>
+                <Text style={styles.sectionTitle}>Linguagens de Programação</Text>
                 <View style={styles.chipContainer}>
                     {linguagens.map((item, idx) => (
                         <TouchableOpacity key={idx} style={styles.chip}>
@@ -29,7 +27,7 @@ export default function Habilidades(){
                     ))}
                 </View>
 
-                <Text style={styles.sectionTitle}>Modulos utilizados no React-Native</Text>
+                <Text style={styles.sectionTitle}>Ferramentas e tecnologias</Text>
                 <View style={styles.chipContainer}>
                     {ferramentas.map((item, idx) => (
                         <TouchableOpacity key={idx} style={styles.chip}>
@@ -59,9 +57,6 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         width: "100%",
         marginTop: 10, // Pequeno espaço entre o texto e as seções
-    },
-    containerTitle: {
-        paddingTop: 10, // Reduzido para aproximar do topo
     },
     title: {
         fontSize: 30,

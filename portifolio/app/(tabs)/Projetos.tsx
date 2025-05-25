@@ -2,50 +2,61 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, Linking, Dimensions } from "react-native";
 import FooterNav from "../components/footerbar";
 import Header from "../components/header";
+import { useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 
 const { width } = Dimensions.get("window");
+const CARD_WIDTH = width * 0.85;
 
 const projetos = [
     {
         id: 1,
-        titulo: "Workshop Maratona",
-        imagem: require( "../../assets/images/maratona.webp"),
+        titulo: "Workshop Maratona ",
+        imagem: require("../../assets/images/maratona.webp"),
         descricao: "Evento de duas semanas organizado pelos próprios membros da equipe de Maratona de Programação, voltado para alunos iniciantes do 1º e 2º períodos do curso de Ciência da Computação. O workshop abordou desde os conceitos básicos de programação até algoritmos mais avançados. Durante o evento, cada integrante da equipe ministrou aulas, e os participantes puderam colocar seus conhecimentos em prática por meio de competições realizadas ao longo das semanas.",
-        link: "https://github.com/seuusuario/projeto1"
+        link: "https://www.instagram.com/p/DGT9qqPy9I9/"
     },
     {
         id: 2,
-        titulo: "Projeto 2",
-        imagem: "https://via.placeholder.com/300x150.png?text=Projeto+2",
-        descricao: "Descrição do Projeto 2.",
-        link: "https://github.com/seuusuario/projeto2"
+        titulo: "Jogo da Senha",
+        imagem: require("../../assets/images/jogo-da-senha.png"),
+        descricao: "O Jogo da Senha (Touros e Vacas) consiste em adivinhar uma sequência secreta de 4 números únicos. A cada palpite, o jogo irá te dar dois tipos de feedback: Touros, que indicam números corretos na posição certa, e Vacas, que indicam números corretos, mas na posição errada. O objetivo é acertar todos os números na ordem correta com o menor número de tentativas. Boa sorte e divirta-se!",
+        link: "/(tabs)/jogo-da-Senha"
     },
-    
+    {
+        id: 3,
+        titulo: "Quiz do Curso de Ciência da Computação",
+        imagem: require("../../assets/images/quizc3.png"),
+        descricao: "O projeto consiste em um quiz voltado para alunos de Ciência da Computação, do 1º ao 5º período, com perguntas baseadas nos conteúdos das disciplinas. A proposta é utilizar a gamificação como ferramenta para tornar o aprendizado mais leve, divertido e interativo, incentivando os estudantes a revisarem os conteúdos de forma mais engajada e motivadora",
+        link: "https://github.com/HenriqueFrancaa/QuizCC-pwm"
+    },
 ];
 
 export default function Projetos() {
     const [index, setIndex] = useState(0);
-
-    const handlePrev = () => {
-        setIndex((prev) => (prev === 0 ? projetos.length - 1 : prev - 1));
-    };
-
-    const handleNext = () => {
-        setIndex((prev) => (prev === projetos.length - 1 ? 0 : prev + 1));
-    };
-
     const projeto = projetos[index];
+    const navigation = useNavigation();
+    const router = useRouter();
+
+    const handlePrev = () => setIndex(index === 0 ? projetos.length - 1 : index - 1);
+    const handleNext = () => setIndex(index === projetos.length - 1 ? 0 : index + 1);
 
     return (
         <View style={styles.container}>
             <Header />
             <View style={styles.card}>
                 <Text style={styles.title}>{projeto.titulo}</Text>
-              <Image source={typeof projeto.imagem === "string" ? { uri: projeto.imagem } :  projeto.imagem} style={styles.image} />
+                <Image source={projeto.imagem} style={styles.image} />
                 <Text style={styles.description}>{projeto.descricao}</Text>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => Linking.openURL(projeto.link)}
+                    onPress={() => {
+                        if (projeto.titulo === "Jogo da Senha") {
+                            router.push("/(tabs)/JogoSenha");
+                        } else {
+                            Linking.openURL(projeto.link);
+                        }
+                    }}
                 >
                     <Text style={styles.buttonText}>Ver Projeto</Text>
                 </TouchableOpacity>
@@ -63,8 +74,6 @@ export default function Projetos() {
     );
 }
 
-const CARD_WIDTH = width * 0.85;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -74,7 +83,6 @@ const styles = StyleSheet.create({
     },
     card: {
         width: CARD_WIDTH,
-        alignSelf: "center",
         backgroundColor: "#fff",
         borderRadius: 16,
         padding: 20,
@@ -94,7 +102,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 300,
-        height: 150,
+        height: 200,
         borderRadius: 8,
         marginBottom: 8,
     },

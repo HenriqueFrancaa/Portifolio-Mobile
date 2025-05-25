@@ -13,7 +13,7 @@ export default function FooterNav(){
             <TouchableOpacity onPress={() => router.push('/(tabs)/Projetos')} >
                 <Text  style={styles.botton}>Projetos</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/')} >
+            <TouchableOpacity onPress={() => router.push('/(tabs)/Habilidades')} >
                 <Text style={styles.botton}>Habilidades</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push('/')} >
