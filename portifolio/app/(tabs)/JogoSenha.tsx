@@ -1,118 +1,114 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
-import { generatePassword, checkGuess } from '../../assets/script/senha';
+import { gerarSenha, conferirPalpite } from '../../assets/script/senha';
 import { useRouter } from "expo-router";
 import FooterNav from '../components/footerbar';
 import Header from '../components/header';
 
-export default function PasswordGame() {
+export default function JogoSenha() {
     const router = useRouter();
-    const [password, setPassword] = useState(generatePassword());
-    const [guess, setGuess] = useState('');
-    const [history, setHistory] = useState<
-        { guess: string; correctPosition: number; correctDigit: number }[]
+    const [senha, setSenha] = useState(gerarSenha());
+    const [palpite, setPalpite] = useState('');
+    const [historico, setHistorico] = useState<
+        { palpite: string; posicaoCerta: number; digitoCerto: number }[]
     >([]);
-    const [revealed, setRevealed] = useState(false);
+    const [revelado, setRevelado] = useState(false);
 
-    const handleGuess = () => {
-        if (guess.length !== 4 || !/^\d{4}$/.test(guess)) {
+    const handlePalpite = () => {
+        if (palpite.length !== 4 || !/^\d{4}$/.test(palpite)) {
             Alert.alert('Digite uma senha de 4 dígitos.');
             return;
         }
-        const result = checkGuess(password, guess);
-        setHistory([{ guess, ...result }, ...history]);
-        setGuess('');
-        if (result.correctPosition === 4) {
+        const resultado = conferirPalpite(senha, palpite);
+        setHistorico([{ palpite, ...resultado }, ...historico]);
+        setPalpite('');
+        if (resultado.posicaoCerta === 4) {
             Alert.alert('Parabéns!', 'Você acertou a senha!');
-            setRevealed(true);
+            setRevelado(true);
         }
     };
 
-    const handleGiveUp = () => setRevealed(true);
+    const handleDesistir = () => setRevelado(true);
 
-    const handleRestart = () => {
-        setPassword(generatePassword());
-        setGuess('');
-        setHistory([]);
-        setRevealed(false);
+    const handleRecomecar = () => {
+        setSenha(gerarSenha());
+        setPalpite('');
+        setHistorico([]);
+        setRevelado(false);
     };
 
     return (
         <KeyboardAvoidingView
             style={{ flex: 1, backgroundColor: '#070743' }}
             behavior={Platform.OS === "ios" ? "padding" : undefined}
-        >
-            <Header />
+            >
             <View style={styles.container}>
-                
                 <TouchableOpacity
                     style={styles.backButton}
                     onPress={() => router.push('/Projetos')}
                 >
                 </TouchableOpacity>
                 <View style={styles.box}>
-                    
-                <Text style={styles.title}>Jogo da Senha</Text>
-                <Text style={styles.text}>
-                    Tente adivinhar a senha de 4 dígitos. Você tem 10 tentativas!</Text>
-                <TextInput
-                    style={styles.input}
-                    value={guess}
-                    onChangeText={setGuess}
-                    keyboardType="number-pad"
-                    maxLength={4}
-                    placeholder="Digite sua tentativa"
-                    placeholderTextColor="#b0b8c1"
-                    editable={!revealed}
+                    <Text style={styles.title}>Jogo da Senha</Text>
+                    <Text style={styles.text}>
+                        Tente adivinhar a senha de 4 dígitos!
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        value={palpite}
+                        onChangeText={setPalpite}
+                        keyboardType="number-pad"
+                        maxLength={4}
+                        placeholder="Digite sua tentativa"
+                        placeholderTextColor="#b0b8c1"
+                        editable={!revelado}
                     />
-                <View style={styles.row}>
-                    <TouchableOpacity
-                        style={[styles.button, revealed && styles.buttonDisabled]}
-                        onPress={handleGuess}
-                        disabled={revealed}
+                    <View style={styles.row}>
+                        <TouchableOpacity
+                            style={[styles.button, revelado && styles.buttonDisabled]}
+                            onPress={handlePalpite}
+                            disabled={revelado}
                         >
-                        <Text style={styles.buttonText}>Enviar</Text>
-                    </TouchableOpacity>
-                    
-                    
-                </View>
-                {revealed && (
-                    <Text style={styles.revealed}>Senha: {password}</Text>
-                )}
-                <Text style={styles.historyTitle}>Histórico:</Text>
-                <FlatList
-                    data={history}
-                    keyExtractor={(_, idx) => idx.toString()}
-                    renderItem={({ item, index }) => (
-                        <Text style={styles.historyItem}>
-                             {item.guess} ({item.correctPosition} Touros, {item.correctDigit} Vacas)
-                        </Text>
+                            <Text style={styles.buttonText}>Enviar</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {revelado && (
+                        <Text style={styles.revealed}>Senha: {senha}</Text>
                     )}
-                    ListEmptyComponent={
-                        <Text style={styles.historyItem}>Nenhuma tentativa ainda.</Text>
-                    }
-                    style={{ width: "100%" }}
+                    <Text style={styles.historyTitle}>Histórico:</Text>
+                    <FlatList
+                        data={historico}
+                        keyExtractor={(_, idx) => idx.toString()}
+                        renderItem={({ item }) => (
+                            <Text style={styles.historyItem}>
+                                {item.palpite} ({item.posicaoCerta} Touros, {item.digitoCerto} Vacas)
+                            </Text>
+                        )}
+                        ListEmptyComponent={
+                            <Text style={styles.historyItem}>Nenhuma tentativa ainda.</Text>
+                        }
+                        style={{ width: "100%" }}
                     />
                     <View style={styles.options}>
-                        
-                    <TouchableOpacity
-                        style={[styles.button, revealed && styles.buttonDisabled]}
-                        onPress={handleGiveUp}
-                        disabled={revealed}
+                        <TouchableOpacity
+                            style={[styles.button, revelado && styles.buttonDisabled]}
+                            onPress={handleDesistir}
+                            disabled={revelado}
                         >
-                        <Text style={styles.buttonText}>Desistir</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={handleRestart}
+                            <Text style={styles.buttonText}>Desistir</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={handleRecomecar}
                         >
-                        <Text style={styles.buttonText}>Recomeçar</Text>
-                    </TouchableOpacity>
-                            </View>
+                            <Text style={styles.buttonText}>Recomeçar</Text>
+                        </TouchableOpacity>
                     </View>
+                </View>
             </View>
-            <FooterNav/>
-            <Header/>
+            <Header />
+            <FooterNav />
+
         </KeyboardAvoidingView>
     );
 }
@@ -121,7 +117,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 18,
-        paddingBottom: 70, // espaço para o FooterNav
+        paddingBottom: 70,
         backgroundColor: '#070743',
         justifyContent: 'center',
     },
@@ -154,7 +150,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    options:{
+    options: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 10,

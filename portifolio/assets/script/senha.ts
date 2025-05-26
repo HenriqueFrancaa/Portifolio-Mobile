@@ -1,37 +1,39 @@
-export function generatePassword() {
-  let password = '';
+export function gerarSenha() {
+  let senha = '';
   for (let i = 0; i < 4; i++) {
-    password += Math.floor(Math.random() * 10).toString();
+    senha += Math.floor(Math.random() * 10).toString();
   }
-  return password;
+  return senha;
 }
 
-export function checkGuess(password: string, guess: string) {
-  let correctPosition = 0;
-  let correctDigit = 0;
-  const passwordArr = password.split('');
-  const guessArr = guess.split('');
-  const usedPassword = Array(4).fill(false);
-  const usedGuess = Array(4).fill(false);
+export function conferirPalpite(senha: string, palpite: string) {
+  let posicaoCerta = 0;
+  let digitoCerto = 0;
+  const arrSenha = senha.split('');
+  const arrPalpite = palpite.split('');
+  const usadoSenha = Array(4).fill(false);
+  const usadoPalpite = Array(4).fill(false);
 
+  // Conta dígitos na posição correta
   for (let i = 0; i < 4; i++) {
-    if (guessArr[i] === passwordArr[i]) {
-      correctPosition++;
-      usedPassword[i] = true;
-      usedGuess[i] = true;
+    if (arrPalpite[i] === arrSenha[i]) {
+      posicaoCerta++;
+      usadoSenha[i] = true;
+      usadoPalpite[i] = true;
     }
   }
 
+  // Conta dígitos corretos em posição errada
   for (let i = 0; i < 4; i++) {
-    if (usedGuess[i]) continue;
+    if (usadoPalpite[i]) continue;
     for (let j = 0; j < 4; j++) {
-      if (!usedPassword[j] && guessArr[i] === passwordArr[j]) {
-        correctDigit++;
-        usedPassword[j] = true;
+      if (!usadoSenha[j] && arrPalpite[i] === arrSenha[j]) {
+        digitoCerto++;
+        usadoSenha[j] = true;
         break;
       }
     }
   }
 
-  return { correctPosition, correctDigit };
+  return { posicaoCerta, digitoCerto };
 }
