@@ -6,7 +6,7 @@ const linguagens = [
     "C++", "C", "Python", "Java", "HTML", "CSS", "JavaScript", "React Native"
 ];
 const ferramentas = [
-    "VSCode", "Git", "Vim", "React", "Notion", "Figma" , "Obsidian"
+    "VSCode", "Git", "Vim", "React", "Notion", "Figma" , "Obsidia"
 ];
 
 export default function Habilidades(){
